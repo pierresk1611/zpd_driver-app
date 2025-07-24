@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zpoledomu Driver App - QR Kód</title>
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        min-height: 100vh;
+      }
+      .container {
+        background: white;
+        color: #333;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+      .logo {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+      .title {
+        font-size: 1.8em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #2d5a87;
+      }
+      .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+      }
+      .qr-placeholder {
+        width: 200px;
+        height: 200px;
+        border: 3px dashed #ccc;
+        margin: 20px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: #999;
+        border-radius: 10px;
+      }
+      .instructions {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        text-align: left;
+      }
+      .step {
+        margin: 10px 0;
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+        border-left: 4px solid #4caf50;
+      }
+      .url-box {
+        background: #e3f2fd;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: monospace;
+        word-break: break-all;
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">🥕📱</div>
+      <div class="title">Zpoledomu Driver App</div>
+      <div class="subtitle">Inštalácia na mobil</div>
+
+      <div class="qr-placeholder">
+        📱 QR kód pre rýchlu inštaláciu<br />
+        (Naskenuj mobilom)
+      </div>
+
+      <div class="url-box">
+        <strong>URL:</strong> https://[tvoj-builder-url].builder.io/
+      </div>
+
+      <div class="instructions">
+        <h3>🚀 Inštalácia (2 minúty):</h3>
+
+        <div class="step">
+          <strong>1️⃣ Naskenuj QR kód</strong><br />
+          Alebo zadaj URL do mobilného prehliadača
+        </div>
+
+        <div class="step">
+          <strong>2️⃣ Pridaj na plochu</strong><br />
+          📱 iPhone: Safari → Zdieľať → "Pridať na úvodnú obrazovku"<br />
+          🤖 Android: Chrome → Menu → "Pridať na úvodnú obrazovku"
+        </div>
+
+        <div class="step">
+          <strong>3️⃣ Hotovo!</strong><br />
+          Aplikácia sa zobrazí ako ikona na ploche
+        </div>
+      </div>
+
+      <div
+        style="
+          background: #e8f5e8;
+          padding: 15px;
+          border-radius: 8px;
+          margin-top: 20px;
+        "
+      >
+        <strong>✅ Aplikácia obsahuje:</strong><br />
+        • Jan Novák - rozhranie vodiča<br />
+        • Reálne objednávky z WooCommerce<br />
+        • GPS navigácia (Waze/Google/Mapy.cz)<br />
+        • SMS notifikácie zákazníkom<br />
+        • Foto doručenia<br />
+        • České rozhranie
+      </div>
+    </div>
+
+    <script>
+      // Generate QR code when page loads
+      const currentUrl = window.location.href.replace("/QR_APPKA.html", "");
+      const qrElement = document.querySelector(".qr-placeholder");
+
+      // Use QR Server API to generate QR code
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`;
+
+      qrElement.innerHTML = `<img src="${qrUrl}" alt="QR Kód pre Zpoledomu App" style="max-width: 100%; border-radius: 10px;">`;
+
+      // Update URL in the text
+      document.querySelector(".url-box").innerHTML =
+        `<strong>URL:</strong> ${currentUrl}`;
+    </script>
+  </body>
+</html>

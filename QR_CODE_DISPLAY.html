@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR kód - Zpoledomu Driver App</title>
+    <style>
+      body {
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .qr-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+      }
+      .header {
+        background: #1a661a;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .qr-container {
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+      .instructions {
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 20px 0;
+        text-align: left;
+      }
+      .instructions h3 {
+        margin: 0 0 10px 0;
+        color: #1e40af;
+        font-size: 16px;
+      }
+      .instructions ol {
+        margin: 0;
+        padding-left: 20px;
+        font-size: 14px;
+      }
+      .instructions li {
+        margin: 5px 0;
+      }
+      .url-box {
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 10px;
+        margin: 15px 0;
+        font-family: monospace;
+        font-size: 12px;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="qr-card">
+      <div class="header">
+        <h1>🥕 Zpoledomu Driver App</h1>
+        <p style="margin: 5px 0 0 0; opacity: 0.9">QR kód pre mobile prístup</p>
+      </div>
+
+      <div class="qr-container">
+        <div id="qr-code" style="margin: 0 auto">
+          <!-- QR kód sa vygeneruje tu -->
+          <div
+            style="
+              width: 200px;
+              height: 200px;
+              border: 2px dashed #d1d5db;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 auto;
+              border-radius: 8px;
+            "
+          >
+            <span style="color: #6b7280">Generujem QR kód...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="url-box">
+        <strong>URL aplikácie:</strong><br />
+        <span id="app-url">Načítavam...</span>
+      </div>
+
+      <div class="instructions">
+        <h3>📱 Naskenujte QR kód mobilom:</h3>
+        <ol>
+          <li>Otvorte kameru na mobile</li>
+          <li>Nasmerujte na QR kód</li>
+          <li>Kliknite na odkaz ktorý sa zobrazí</li>
+          <li>Aplikácia sa otvorí v browseri</li>
+          <li><strong>iPhone:</strong> Share → "Add to Home Screen"</li>
+          <li><strong>Android:</strong> Menu → "Add to Home screen"</li>
+        </ol>
+      </div>
+
+      <div style="margin: 20px 0; font-size: 14px; color: #6b7280">
+        <p><strong>Aplikácia obsahuje:</strong></p>
+        <p>
+          ✅ Driver interface "Jan Novák"<br />
+          ✅ Dnešné objednávky<br />
+          ✅ Telefonovanie zákazníkom<br />
+          ✅ GPS navigácia<br />
+          ✅ Mobile optimalizované
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Simple QR code generator using API
+      function generateQR() {
+        const currentURL = window.location.href.replace(
+          "QR_CODE_DISPLAY.html",
+          "",
+        );
+        document.getElementById("app-url").textContent = currentURL;
+
+        // Using QR Server API to generate QR code
+        const qrSize = 200;
+        const qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(currentURL)}&color=1a661a&bgcolor=ffffff&margin=10`;
+
+        const qrContainer = document.getElementById("qr-code");
+        qrContainer.innerHTML = `
+                <img src="${qrURL}" 
+                     alt="QR kód pre Zpoledomu Driver App" 
+                     style="width: 200px; height: 200px; border-radius: 8px; border: 2px solid #e5e7eb;"
+                     onerror="this.style.display='none'; document.getElementById('qr-fallback').style.display='block';">
+                <div id="qr-fallback" style="display: none; padding: 20px; color: #6b7280;">
+                    <p>QR kód sa nepodarilo načítať.<br>
+                    Skopírujte URL vyššie a otvorte ju v mobile browseri.</p>
+                </div>
+            `;
+      }
+
+      // Generate QR code when page loads
+      document.addEventListener("DOMContentLoaded", generateQR);
+    </script>
+  </body>
+</html>

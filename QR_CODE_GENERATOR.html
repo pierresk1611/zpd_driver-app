@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zpoledomu Driver App - QR Code</title>
+    <style>
+      body {
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .qr-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+      }
+      .header {
+        background: #1a661a;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .header p {
+        margin: 5px 0 0 0;
+        opacity: 0.9;
+        font-size: 16px;
+      }
+      #qrcode {
+        margin: 20px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .instructions {
+        background: #f9fafb;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: left;
+      }
+      .instructions h3 {
+        margin: 0 0 15px 0;
+        color: #1a661a;
+        font-size: 18px;
+      }
+      .instructions ol {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .instructions li {
+        margin: 8px 0;
+        line-height: 1.5;
+      }
+      .url-display {
+        background: #f3f4f6;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 20px 0;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        word-break: break-all;
+        border: 2px solid #e5e7eb;
+      }
+      .features {
+        text-align: left;
+        margin: 20px 0;
+      }
+      .features h4 {
+        color: #1a661a;
+        margin: 0 0 10px 0;
+      }
+      .features ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .features li {
+        margin: 5px 0;
+        line-height: 1.4;
+      }
+      .btn {
+        background: #1a661a;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        margin: 10px;
+        transition: background 0.15s;
+      }
+      .btn:hover {
+        background: #15803d;
+      }
+      .current-url {
+        color: #6b7280;
+        font-size: 14px;
+        margin: 15px 0;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  </head>
+  <body>
+    <div class="qr-container">
+      <div class="header">
+        <h1>🥕 Zpoledomu Driver App</h1>
+        <p>QR Code pre mobile prístup</p>
+      </div>
+
+      <div id="qrcode"></div>
+
+      <div class="current-url">
+        <strong>Aktuálna URL:</strong>
+        <div class="url-display" id="current-url">Načítavam...</div>
+      </div>
+
+      <div class="instructions">
+        <h3>📱 Ako nainštalovať do mobilu:</h3>
+        <ol>
+          <li><strong>Naskenujte QR kód</strong> mobilom</li>
+          <li><strong>Otvorí sa aplikácia</strong> v browseri</li>
+          <li><strong>iPhone:</strong> Share → "Add to Home Screen"</li>
+          <li><strong>Android:</strong> Menu → "Add to Home screen"</li>
+          <li><strong>Hotovo!</strong> Aplikácia je na home screen</li>
+        </ol>
+      </div>
+
+      <div class="features">
+        <h4>🚀 Aplikácia obsahuje:</h4>
+        <ul>
+          <li>✅ Driver interface pre "Jan Novák"</li>
+          <li>✅ Dnešné objednávky real-time</li>
+          <li>✅ Telefonovanie zákazníkom (tap to call)</li>
+          <li>✅ GPS navigácia (Waze/Google Maps)</li>
+          <li>✅ Status updates (Na cestě, Doručeno)</li>
+          <li>✅ Auto-refresh každé 2 minúty</li>
+          <li>✅ PWA - funguje ako native app</li>
+        </ul>
+      </div>
+
+      <button class="btn" onclick="generateNewQR()">🔄 Refresh QR Code</button>
+      <button class="btn" onclick="downloadQR()">💾 Stiahnuť QR</button>
+    </div>
+
+    <script>
+      let qrCanvas = null;
+
+      function getCurrentURL() {
+        return window.location.href.replace("/QR_CODE_GENERATOR.html", "");
+      }
+
+      function generateQRCode(url) {
+        const qrContainer = document.getElementById("qrcode");
+        qrContainer.innerHTML = ""; // Clear previous QR
+
+        QRCode.toCanvas(
+          url,
+          {
+            width: 256,
+            height: 256,
+            margin: 2,
+            color: {
+              dark: "#1a661a",
+              light: "#ffffff",
+            },
+            errorCorrectionLevel: "M",
+          },
+          function (error, canvas) {
+            if (error) {
+              console.error(error);
+              qrContainer.innerHTML =
+                '<p style="color: red;">Chyba pri generovaní QR kódu</p>';
+              return;
+            }
+
+            qrCanvas = canvas;
+            canvas.style.border = "2px solid #e5e7eb";
+            canvas.style.borderRadius = "12px";
+            qrContainer.appendChild(canvas);
+
+            console.log("QR Code generated for:", url);
+          },
+        );
+      }
+
+      function generateNewQR() {
+        const currentURL = getCurrentURL();
+        generateQRCode(currentURL);
+        document.getElementById("current-url").textContent = currentURL;
+      }
+
+      function downloadQR() {
+        if (!qrCanvas) {
+          alert("Najprv vygenerujte QR kód");
+          return;
+        }
+
+        const link = document.createElement("a");
+        link.download = "zpoledomu-driver-app-qr.png";
+        link.href = qrCanvas.toDataURL();
+        link.click();
+      }
+
+      // Auto-generate QR on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        generateNewQR();
+      });
+
+      // Update QR if URL changes
+      window.addEventListener("hashchange", generateNewQR);
+    </script>
+  </body>
+</html>
