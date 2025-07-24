@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zpoledomu Driver App</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥕</text></svg>"
+    />
+
+    <!-- PWA Meta tags -->
+    <meta name="theme-color" content="#2d5a87" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Zpoledomu" />
+
+    <!-- Manifest -->
+    <link
+      rel="manifest"
+      href='data:application/json,{"name":"Zpoledomu Driver App","short_name":"Zpoledomu","icons":[{"src":"data:image/svg+xml,<svg xmlns=&apos;http://www.w3.org/2000/svg&apos; viewBox=&apos;0 0 512 512&apos;><rect width=&apos;512&apos; height=&apos;512&apos; fill=&apos;%232d5a87&apos;/><text x=&apos;50%25&apos; y=&apos;60%25&apos; dominant-baseline=&apos;middle&apos; text-anchor=&apos;middle&apos; font-size=&apos;300&apos;>🥕</text></svg>","sizes":"512x512","type":"image/svg+xml"}],"start_url":"/","display":"standalone","theme_color":"%232d5a87","background_color":"%23ffffff"}'
+    />
+
+    <style>
+      /* Critical CSS embedded */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f5f5f5;
+        color: #333;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        background: #2d5a87;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+      .header h1 {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      .header p {
+        opacity: 0.9;
+        font-size: 14px;
+      }
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .order {
+        border-left: 4px solid #4caf50;
+        padding: 16px;
+        margin-bottom: 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+      .order h3 {
+        color: #2d5a87;
+        margin-bottom: 8px;
+      }
+      .order p {
+        margin: 4px 0;
+        color: #666;
+      }
+      .status {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 12px;
+        font-weight: bold;
+        background: #4caf50;
+        color: white;
+      }
+      .btn {
+        background: #2d5a87;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 8px 4px;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+      }
+      .btn:hover {
+        background: #1e3f5f;
+      }
+      .btn-secondary {
+        background: #6c757d;
+      }
+      .btn-danger {
+        background: #dc3545;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .stat {
+        text-align: center;
+        background: white;
+        padding: 16px;
+        border-radius: 8px;
+      }
+      .stat-number {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2d5a87;
+      }
+      .stat-label {
+        font-size: 12px;
+        color: #666;
+        margin-top: 4px;
+      }
+      .nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 16px 0;
+      }
+      @media (max-width: 640px) {
+        .container {
+          padding: 12px;
+        }
+        .nav {
+          flex-direction: column;
+        }
+        .btn {
+          width: 100%;
+          margin: 4px 0;
+        }
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>🥕 Zpoledomu Driver App</h1>
+        <p>Jan Novák - Rozvozy zeleniny</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">2</div>
+          <div class="stat-label">Dnešní objednávky</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Na cestě</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Doručeno</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">15</div>
+          <div class="stat-label">Celkem minut</div>
+        </div>
+      </div>
+
+      <!-- Today's Orders -->
+      <div class="card">
+        <h2 style="margin-bottom: 16px; color: #2d5a87">
+          📦 Dnešní objednávky
+        </h2>
+
+        <!-- Order 1 -->
+        <div class="order">
+          <h3>Marie Svobodová</h3>
+          <p><strong>📍 Adresa:</strong> Wenceslas Square 1, Praha 110 00</p>
+          <p><strong>📱 Telefon:</strong> +420 601 222 333</p>
+          <p><strong>⏰ Čas doručení:</strong> 09:00-12:00</p>
+          <p><strong>💰 Celkem:</strong> 234 Kč</p>
+          <p>
+            <strong>📦 Položky:</strong> Čerstvá mrkev (2kg), Brambory (3kg)
+          </p>
+          <span class="status">Čekající</span>
+
+          <div class="nav">
+            <a href="#" class="btn" onclick="alert('Navigace Waze')">🗺️ Waze</a>
+            <!-- Google Maps hidden as requested -->
+            <a href="#" class="btn btn-secondary" onclick="alert('Mapy.cz')"
+              >🗺️ Mapy.cz</a
+            >
+            <a
+              href="#"
+              class="btn btn-secondary"
+              onclick="alert('Volanie zákazníka')"
+              >📞 Volat</a
+            >
+            <a
+              href="#"
+              class="btn btn-secondary"
+              onclick="alert('SMS odeslána')"
+              >📱 SMS</a
+            >
+            <a
+              href="#"
+              class="btn btn-secondary"
+              onclick="alert('Nahlásenie zdržania')"
+              >⚠️ Zdržení</a
+            >
+          </div>
+
+          <div class="nav">
+            <button class="btn" onclick="updateStatus(this, 'Na cestě')">
+              🚚 Na cestu
+            </button>
+            <button
+              class="btn btn-danger"
+              onclick="updateStatus(this, 'Doručeno')"
+            >
+              ✅ Doručeno
+            </button>
+          </div>
+        </div>
+
+        <!-- Order 2 -->
+        <div class="order">
+          <h3>Petr Krejčí</h3>
+          <p><strong>📍 Adresa:</strong> Národní 25, Praha 110 00</p>
+          <p><strong>📱 Telefon:</strong> +420 602 444 555</p>
+          <p><strong>⏰ Čas doručení:</strong> 12:00-15:00</p>
+          <p><strong>💰 Celkem:</strong> 156 Kč</p>
+          <p>
+            <strong>📦 Položky:</strong> Cherry rajčata (1kg), Lesní med (1kg)
+          </p>
+          <span class="status">Čekající</span>
+
+          <div class="nav">
+            <a href="#" class="btn" onclick="alert('Navigace Waze')">🗺️ Waze</a>
+            <!-- Google Maps hidden as requested -->
+            <a href="#" class="btn btn-secondary" onclick="alert('Mapy.cz')"
+              >🗺️ Mapy.cz</a
+            >
+            <a
+              href="#"
+              class="btn btn-secondary"
+              onclick="alert('Volanie zákazníka')"
+              >📞 Volat</a
+            >
+            <a
+              href="#"
+              class="btn btn-secondary"
+              onclick="alert('SMS odeslána')"
+              >📱 SMS</a
+            >
+            <a
+              href="#"
+              class="btn btn-secondary"
+              onclick="alert('Nahlásenie zdržania')"
+              >⚠️ Zdržení</a
+            >
+          </div>
+
+          <div class="nav">
+            <button class="btn" onclick="updateStatus(this, 'Na cestě')">
+              🚚 Na cestu
+            </button>
+            <button
+              class="btn btn-danger"
+              onclick="updateStatus(this, 'Doručeno')"
+            >
+              ✅ Doručeno
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading Section -->
+      <div class="card">
+        <h2 style="margin-bottom: 16px; color: #2d5a87">📦 Naloženie tovaru</h2>
+        <div style="text-align: center; margin-bottom: 16px">
+          <button
+            class="btn"
+            onclick="loadAll()"
+            style="background: #28a745; font-size: 18px; padding: 16px 32px"
+          >
+            ✅ NALOŽIŤ VŠETKO (14 položiek zo 4 skladov)
+          </button>
+        </div>
+
+        <div
+          id="loading-status"
+          style="
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: #d4edda;
+            border-radius: 8px;
+            color: #155724;
+          "
+        >
+          <strong>✅ Všetok tovar je naložený!</strong>
+          <div
+            style="
+              font-size: 14px;
+              margin-top: 12px;
+              text-align: left;
+              max-width: 400px;
+              margin-left: auto;
+              margin-right: auto;
+            "
+          >
+            <strong>🏪 Sklad:</strong><br />
+            • Cibule žlutá (3ks) ✓<br />
+            • Cibule červená (2ks) ✓<br />
+            • Med (4ks) ✓<br />
+            • Česnek (5ks) ✓<br /><br />
+
+            <strong>🏪 Hlavenec:</strong><br />
+            • Rajčata (6ks) ✓<br /><br />
+
+            <strong>🏪 Halbich:</strong><br />
+            • Brambory velké (8ks) ✓<br />
+            • Brambory malé (5ks) ✓<br /><br />
+
+            <strong>🏪 Fabian:</strong><br />
+            • Mrkev (4ks) ✓<br />
+            • Petržel (3ks) ✓
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="card">
+        <h2 style="margin-bottom: 16px; color: #2d5a87">🛠️ Akce</h2>
+        <div class="nav">
+          <button class="btn" onclick="alert('Trasa optimalizována!')">
+            🗺️ Optimalizovat trasu
+          </button>
+          <button class="btn btn-secondary" onclick="alert('Data obnovena!')">
+            🔄 Obnovit data
+          </button>
+          <button
+            class="btn btn-secondary"
+            onclick="alert('Nastavení otevřeno!')"
+          >
+            ⚙️ Nastavení
+          </button>
+        </div>
+      </div>
+
+      <!-- Photo Functionality Tip -->
+      <div class="card">
+        <h2 style="margin-bottom: 16px; color: #2d5a87">📸 Foto funkcie</h2>
+        <div
+          style="
+            padding: 12px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            margin-bottom: 16px;
+          "
+        >
+          <strong>💡 Tip:</strong> Foto + doručiť - po doručení môžete urobiť
+          foto ako potvrdenie úspešného doručenia
+        </div>
+        <p style="font-size: 14px; color: #666">
+          Po kliknutí na "Doručeno" sa môže otvoriť kamera na zachytenie foto
+          pre dokumentáciu.
+        </p>
+      </div>
+
+      <!-- Installation Guide -->
+      <div class="card">
+        <h2 style="margin-bottom: 16px; color: #2d5a87">
+          📱 Instalace na mobil
+        </h2>
+        <p style="margin-bottom: 12px">
+          <strong>iPhone:</strong> Safari → Sdílet → "Přidat na úvodní
+          obrazovku"
+        </p>
+        <p>
+          <strong>Android:</strong> Chrome → Menu (3 tečky) → "Přidat na úvodní
+          obrazovku"
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // PWA functionality
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register(
+          'data:text/javascript,console.log("SW loaded")',
+        );
+      }
+
+      // Update order status
+      function updateStatus(button, newStatus) {
+        const order = button.closest(".order");
+        const statusEl = order.querySelector(".status");
+
+        if (newStatus === "Doručeno") {
+          // Track delivered order
+          const customerName = order.querySelector("h3").textContent;
+          const deliveryTime = new Date().toLocaleTimeString("cs-CZ", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+          deliveredCount++;
+          deliveredOrders.push({
+            customer: customerName,
+            time: deliveryTime,
+            deliveredAt: new Date(),
+          });
+
+          // Show confirmation and remove order
+          alert(
+            `✅ Objednávka doručena!\n\nZákazník: ${customerName}\nČas doručení: ${deliveryTime}\n\nObjednávka bola odstránená zo zoznamu.`,
+          );
+          order.style.transition = "opacity 0.5s ease-out";
+          order.style.opacity = "0";
+          setTimeout(() => {
+            order.remove();
+            updateStats();
+          }, 500);
+        } else {
+          statusEl.textContent = newStatus;
+          if (newStatus === "Na cestě") {
+            statusEl.style.background = "#007bff";
+          }
+          alert("Status aktualizován: " + newStatus);
+          updateStats();
+        }
+      }
+
+      // Track delivered orders
+      let deliveredCount = 0;
+      const deliveredOrders = [];
+
+      // Update statistics
+      function updateStats() {
+        const orders = document.querySelectorAll(".order");
+        const total = orders.length;
+        const onRoute = Array.from(orders).filter(
+          (o) =>
+            o.querySelector(".status") &&
+            o.querySelector(".status").textContent === "Na cestě",
+        ).length;
+
+        document.querySelectorAll(".stat-number")[0].textContent = total; // Current orders
+        document.querySelectorAll(".stat-number")[1].textContent = onRoute;
+        document.querySelectorAll(".stat-number")[2].textContent =
+          deliveredCount; // Delivered count
+
+        // Show completion message when all delivered
+        if (total === 0 && deliveredCount > 0) {
+          const existingMessage = document.querySelector(".completion-message");
+          if (!existingMessage) {
+            document.querySelector(".container").innerHTML += `
+              <div class="card completion-message" style="background: #d4edda; border: 2px solid #28a745; text-align: center;">
+                <h2 style="color: #155724; margin-bottom: 16px;">🎉 Všetky objednávky doručené!</h2>
+                <p style="color: #155724;">Výborná práca! Všetky dnešné objednávky (${deliveredCount}) boli úspešne doručené.</p>
+                <div style="margin-top: 16px; font-size: 14px; color: #155724;">
+                  <strong>Doručené objednávky:</strong><br>
+                  ${deliveredOrders.map((order) => `• ${order.customer} - ${order.time}`).join("<br>")}
+                </div>
+              </div>
+            `;
+          }
+        }
+      }
+
+      // Load all function
+      function loadAll() {
+        const button = event.target;
+        button.style.background = "#6c757d";
+        button.textContent = "⏳ Nakladám zo 4 skladov...";
+        button.disabled = true;
+
+        setTimeout(() => {
+          document.getElementById("loading-status").style.display = "block";
+          button.style.display = "none";
+          alert(
+            "✅ Všetok tovar je naložený!\n\n14 položiek zo 4 skladov:\n• Sklad (4 produkty)\n• Hlavenec (1 produkt)\n• Halbich (2 produkty)\n• Fabian (2 produkty)\n\nTeraz môžete začať s rozvozom.",
+          );
+        }, 2000);
+      }
+
+      // Install prompt
+      let deferredPrompt;
+      window.addEventListener("beforeinstallprompt", (e) => {
+        deferredPrompt = e;
+        console.log("PWA install available");
+      });
+    </script>
+  </body>
+</html>
