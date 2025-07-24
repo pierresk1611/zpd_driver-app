@@ -1,0 +1,319 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    --background: 120 20% 98%;
+    --foreground: 120 15% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 120 15% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 120 15% 15%;
+
+    --primary: 120 60% 25%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 120 20% 95%;
+    --secondary-foreground: 120 60% 25%;
+
+    --muted: 120 15% 96%;
+    --muted-foreground: 120 10% 45%;
+
+    --accent: 85 80% 85%;
+    --accent-foreground: 120 60% 25%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 120 20% 88%;
+    --input: 120 20% 92%;
+    --ring: 120 60% 25%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 120 25% 96%;
+    --sidebar-foreground: 120 15% 15%;
+    --sidebar-primary: 120 60% 25%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 120 20% 93%;
+    --sidebar-accent-foreground: 120 60% 25%;
+    --sidebar-border: 120 20% 88%;
+    --sidebar-ring: 120 60% 25%;
+
+    /* Custom delivery app colors */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --warning: 48 96% 53%;
+    --warning-foreground: 120 15% 15%;
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 98%;
+  }
+
+  .dark {
+    --background: 120 15% 8%;
+    --foreground: 120 20% 95%;
+
+    --card: 120 15% 10%;
+    --card-foreground: 120 20% 95%;
+
+    --popover: 120 15% 10%;
+    --popover-foreground: 120 20% 95%;
+
+    --primary: 120 50% 65%;
+    --primary-foreground: 120 15% 8%;
+
+    --secondary: 120 15% 15%;
+    --secondary-foreground: 120 20% 95%;
+
+    --muted: 120 15% 15%;
+    --muted-foreground: 120 10% 65%;
+
+    --accent: 85 60% 45%;
+    --accent-foreground: 120 20% 95%;
+
+    --destructive: 0 65% 45%;
+    --destructive-foreground: 120 20% 95%;
+
+    --border: 120 15% 18%;
+    --input: 120 15% 18%;
+    --ring: 120 50% 65%;
+
+    --sidebar-background: 120 15% 6%;
+    --sidebar-foreground: 120 20% 95%;
+    --sidebar-primary: 120 50% 65%;
+    --sidebar-primary-foreground: 120 15% 8%;
+    --sidebar-accent: 120 15% 12%;
+    --sidebar-accent-foreground: 120 20% 95%;
+    --sidebar-border: 120 15% 18%;
+    --sidebar-ring: 120 50% 65%;
+
+    /* Custom delivery app colors */
+    --success: 142 66% 46%;
+    --success-foreground: 120 20% 95%;
+    --warning: 48 86% 63%;
+    --warning-foreground: 120 15% 8%;
+    --info: 199 79% 58%;
+    --info-foreground: 120 20% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Device-Specific Layout System */
+@layer utilities {
+  /* Mobile-specific layouts */
+  .mobile-layout {
+    @apply w-full mx-auto;
+  }
+
+  .mobile-container {
+    @apply px-4 py-4;
+  }
+
+  .mobile-grid {
+    @apply grid grid-cols-1 gap-4;
+  }
+
+  /* Tablet-specific layouts */
+  .tablet-layout {
+    @apply max-w-2xl mx-auto;
+  }
+
+  .tablet-container {
+    @apply px-4 py-3;
+  }
+
+  .tablet-grid {
+    @apply grid grid-cols-2 gap-4;
+  }
+
+  /* Desktop-specific layouts */
+  .desktop-layout {
+    @apply max-w-4xl mx-auto;
+  }
+
+  .desktop-container {
+    @apply px-6 py-4;
+  }
+
+  .desktop-grid {
+    @apply grid grid-cols-3 gap-6;
+  }
+
+  /* Responsive Layout Classes */
+  .layout-mobile {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    padding: 1rem !important;
+  }
+
+  .layout-tablet {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 768px !important;
+    margin: 0 auto !important;
+    padding: 1rem !important;
+  }
+
+  .layout-desktop {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 1024px !important;
+    margin: 0 auto !important;
+    padding: 1.5rem !important;
+  }
+
+  /* Responsive breakpoint locks */
+  @media (max-width: 767px) {
+    .responsive-container {
+      @apply mobile-layout mobile-container;
+    }
+
+    .responsive-grid {
+      @apply mobile-grid;
+    }
+
+    /* Force full width on mobile */
+    .container,
+    .max-w-7xl,
+    .max-w-6xl,
+    .max-w-5xl,
+    .max-w-4xl,
+    .max-w-3xl,
+    .max-w-2xl,
+    .max-w-xl {
+      @apply w-full max-w-none !important;
+      @apply px-4 !important;
+    }
+
+    /* Better mobile button spacing */
+    .space-y-4 > * {
+      @apply mb-3 !important;
+    }
+
+    /* Better mobile card spacing */
+    .space-y-6 > * {
+      @apply mb-3 !important;
+    }
+
+    .space-y-3 > * {
+      @apply mb-2 !important;
+    }
+
+    /* Mobile-optimized touch targets and styling */
+    button {
+      min-height: 44px;
+      font-size: 0.75rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Better mobile spacing */
+    .p-4 {
+      padding: 0.5rem;
+    }
+
+    .p-3 {
+      padding: 0.5rem;
+    }
+
+    /* Mobile tab navigation - simple approach */
+    .tab-navigation {
+      flex-direction: column;
+    }
+
+    /* Mobile button containers */
+    .mobile-button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    /* Optimize mobile card headers */
+    .bg-primary {
+      @apply px-4 py-4 !important;
+    }
+
+    /* Better mobile font sizes */
+    h1 {
+      @apply text-lg !important;
+    }
+
+    h3 {
+      @apply text-base !important;
+    }
+
+    .text-sm {
+      @apply text-base !important;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .responsive-container {
+      @apply tablet-layout tablet-container;
+    }
+
+    .responsive-grid {
+      @apply tablet-grid;
+    }
+
+    /* Lock tablet layout */
+    .container,
+    .max-w-7xl,
+    .max-w-6xl,
+    .max-w-5xl,
+    .max-w-4xl,
+    .max-w-3xl {
+      @apply max-w-2xl !important;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .responsive-container {
+      @apply desktop-layout desktop-container;
+    }
+
+    .responsive-grid {
+      @apply desktop-grid;
+    }
+
+    /* Lock desktop layout */
+    .container,
+    .max-w-7xl,
+    .max-w-6xl,
+    .max-w-5xl {
+      @apply max-w-4xl !important;
+    }
+  }
+
+  /* Force specific device layouts */
+  .force-mobile {
+    @apply layout-mobile mobile-container mobile-grid;
+  }
+
+  .force-tablet {
+    @apply layout-tablet tablet-container tablet-grid;
+  }
+
+  .force-desktop {
+    @apply layout-desktop desktop-container desktop-grid;
+  }
+}
